@@ -2,6 +2,66 @@
 
 ## Introduction
 
+This section of the README provides instructions on how to run the Card Status API using Docker. Docker encapsulates the environment and dependencies, ensuring that the application runs consistently across different machines.
+
+## Prerequisites
+
+Before proceeding, ensure that Docker is installed on your system. If you do not have Docker installed, please follow the instructions on the [official Docker website](https://docs.docker.com/get-docker/).
+
+## Running the Application with Docker
+
+### Building the Docker Image
+
+To build the Docker image for the Card Status API, open a terminal, navigate to the root directory of the project (where the `Dockerfile` is located), and run the following command:
+
+`docker build -t card-status-api .`
+
+This command creates a Docker image named `card-status-api` based on the Dockerfile in the current directory.
+
+### Running the Docker Container
+
+After the image has been built, you can run the application in a Docker container. To ensure that the SQLite database persists across container restarts, mount a volume that points to the `data` directory on your host machine.
+
+Execute the following command to start the container with the mounted volume:
+
+`docker run -p 3000:3000 -v "$(pwd)/data:/usr/src/app/data" --name card-status-api card-status-api`
+
+
+Here's what each part of the command does:
+
+- `-p 3000:3000` maps port 3000 of the container to port 3000 on your host machine, allowing you to access the application via `localhost:3000`.
+- `-v "$(pwd)/data:/usr/src/app/data"` mounts a volume from the `data` directory in your current working directory to `/usr/src/app/data` inside the container, ensuring that your database file is persistent.
+- `--name card-status-api` gives your container a recognizable name.
+- `card-status-api` at the end specifies which image to use to create the container.
+
+### Accessing the Application
+
+With the container running, the API is accessible at `http://localhost:3000`. You can now use the `/get_card_status` endpoint to query the status of a card by providing a `userMobile` or `cardId` as a query parameter.
+
+### Stopping the Container
+
+If you need to stop the running container, you can do so with the following command:
+
+`docker stop card-status-api`
+
+This command stops the container named `card-status-api`.
+
+
+### Starting the Container Again
+
+To start the container again after stopping it, use:
+
+`docker start card-status-api`
+
+
+This will resume the application without losing any data thanks to the mounted volume.
+
+By following these instructions, you can deploy and run the Card Status API in a Docker container, ensuring a consistent and isolated environment for the application.
+
+# Card Status API
+
+## Introduction
+
 This document provides an overview of the Card Status API, which is designed to assist support agents and internal tracking by providing the status of a user's card based on their phone number or card ID. The API is built using Node.js and Express for the server, with an SQLite database to store and retrieve card status information.
 
 ## Approach
